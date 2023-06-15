@@ -46,25 +46,19 @@ def seq_list_to_video(source_folder, dest_path, fps):
             dst = os.path.join(temp_dir, f"frame_{i:06d}.png")
             shutil.copy(file_name, dst)
 
-        # Set the input PNG sequence and output video file names
-        input_sequence = os.path.join(temp_dir, "frame_%06d.png")
+        # Add extension if not
+        if not dest_path.endswith((".mp4", ".mov")):
+            dest_path += ".mp4"
 
-        # Set the frame rate and video codec
-        video_codec = "libx264"
-
-        # Define the input and output streams
-        input_stream = ffmpeg.input(input_sequence, framerate=fps)
-        output_stream = ffmpeg.output(input_stream, dest_path, vcodec=video_codec)
-
-        # Run the conversion process
-        ffmpeg.run(output_stream)
+        (
+            ffmpeg.input(f"{temp_dir}/*.png", pattern_type="glob", framerate=fps)
+            .output(dest_path, crf=18, pix_fmt="yuv420p")
+            .run()
+        )
     finally:
         # Clean up: remove temp directory and its contents
         # shutil.rmtree(temp_dir)
         print("Done")
-
-
-import ffmpeg
 
 
 def video_to_seq_list(video_input, seq_output_folder, fps):
