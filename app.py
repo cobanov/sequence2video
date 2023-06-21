@@ -99,13 +99,7 @@ while True:
         fps = int(values["-FPS2-"])
 
         if video_input and seq_output_folder:
-            if os.path.exists(seq_output_folder):
-                sg.popup_error(
-                    "A folder with the same name already exists at the sequence output path. Please choose a different folder.",
-                    title="Error",
-                )
-            else:
-                seq2vid.video_to_seq_list(video_input, seq_output_folder, fps)
-                sg.popup("Conversion completed!", title="Vid2Seq")
+            seq2vid.video_to_seq_list(video_input, seq_output_folder, fps)
+            sg.popup("Conversion completed!", title="Vid2Seq")
 
 window.close()
