@@ -51,13 +51,16 @@ def seq_list_to_video(source_folder, dest_path, fps):
             dest_path += ".mp4"
 
         (
-            ffmpeg.input(f"{temp_dir}/*.png", pattern_type="glob", framerate=fps)
+            ffmpeg.input(
+                f"{temp_dir}/frame_%6d.png", pattern_type="sequence", framerate=fps
+            )
             .output(dest_path, crf=18, pix_fmt="yuv420p")
+            .overwrite_output()
             .run()
         )
     finally:
         # Clean up: remove temp directory and its contents
-        # shutil.rmtree(temp_dir)
+        shutil.rmtree(temp_dir)
         print("Done")
 
 
